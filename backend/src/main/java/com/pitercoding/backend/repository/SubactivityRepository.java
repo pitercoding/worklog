@@ -6,5 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface SubactivityRepository extends JpaRepository<Subactivity, Long> {
+    List<Subactivity> findAllByActiveTrue();
     List<Subactivity> findAllByActivityIdAndActiveTrue(Long activityId);
 }

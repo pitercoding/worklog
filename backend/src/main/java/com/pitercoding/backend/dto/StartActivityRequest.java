@@ -1,10 +1,17 @@
 package com.pitercoding.backend.dto;
 
+import jakarta.validation.constraints.NotNull;
+
 public class StartActivityRequest {
+    @NotNull
     private Long programId;
+    @NotNull
     private Long teamId;
+    @NotNull
     private Long languageId;
+    @NotNull
     private Long activityId;
+    @NotNull
     private Long subactivityId;
     private String note;
 

@@ -14,6 +14,10 @@ public class SubactivityService {
         this.subactivityRepository = subactivityRepository;
     }
 
+    public List<Subactivity> getActiveSubactivities() {
+        return subactivityRepository.findAllByActiveTrue();
+    }
+
     public List<Subactivity> getActiveSubactivitiesByActivity(Long activityId) {
         return subactivityRepository.findAllByActivityIdAndActiveTrue(activityId);
     }
