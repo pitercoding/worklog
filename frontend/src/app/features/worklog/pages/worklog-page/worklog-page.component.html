@@ -1,0 +1,31 @@
+<section class="worklog-page" *ngIf="state$ | async as state">
+  <header class="page-header">
+    <h1>Worklog</h1>
+    <button type="button" (click)="onSaveDay()" [disabled]="state.loading">
+      Save Day
+    </button>
+  </header>
+
+  <div class="grid">
+    <article class="panel">
+      <h2>Form</h2>
+      <p>Build your ActivityFormComponent here and bind submit to onStartActivity(payload).</p>
+      <pre>{{ state.lookups | json }}</pre>
+    </article>
+
+    <article class="panel">
+      <h2>Timer / Summary</h2>
+      <p>Current Entry:</p>
+      <pre>{{ state.currentEntry | json }}</pre>
+      <p>Total Entries: {{ state.entries.length }}</p>
+    </article>
+
+    <article class="panel">
+      <h2>Table</h2>
+      <pre>{{ state.entries | json }}</pre>
+    </article>
+  </div>
+
+  <p class="status" *ngIf="state.loading">Loading...</p>
+  <p class="status error" *ngIf="state.error">{{ state.error }}</p>
+</section>
