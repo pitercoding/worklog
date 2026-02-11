@@ -1,11 +1,23 @@
-import { AsyncPipe, JsonPipe, NgIf } from '@angular/common';
+import { AsyncPipe, NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { StartActivityRequest } from '../../models/worklog.model';
 import { WorklogStoreService } from '../../state/worklog-store.services';
+import { ActivityFormComponent } from '../../components/activity-form/activity-form.component';
+import { ActivityTableComponent } from '../../components/activity-table/activity-table.component';
+import { DaySummaryComponent } from '../../components/day-summary/day-summary.component';
+import { RunningTimerComponent } from '../../components/running-timer/running-timer.component';
+import { todayApiDate } from '../../../../shared/utils/date.utils';
 
 @Component({
   selector: 'app-worklog-page',
-  imports: [NgIf, AsyncPipe, JsonPipe],
+  imports: [
+    NgIf,
+    AsyncPipe,
+    ActivityFormComponent,
+    ActivityTableComponent,
+    RunningTimerComponent,
+    DaySummaryComponent,
+  ],
   templateUrl: './worklog-page.component.html',
   styleUrl: './worklog-page.component.scss',
 })
@@ -18,7 +30,7 @@ export class WorklogPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const today = this.todayIso();
+    const today = todayApiDate();
     this.worklogStore.loadLookups();
     this.worklogStore.loadWorkDay(this.employeeId, today);
   }
@@ -29,9 +41,5 @@ export class WorklogPageComponent implements OnInit {
 
   onSaveDay(): void {
     this.worklogStore.saveDay(this.employeeId);
-  }
-
-  private todayIso(): string {
-    return new Date().toISOString().slice(0, 10);
   }
 }

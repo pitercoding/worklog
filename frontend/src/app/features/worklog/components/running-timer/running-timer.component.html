@@ -1,0 +1,7 @@
+<section>
+  <h3>Running Timer</h3>
+  <p *ngIf="startedAt; else stopped">{{ elapsedSeconds | duration }}</p>
+  <ng-template #stopped>
+    <p>No running activity.</p>
+  </ng-template>
+</section>
