@@ -1,4 +1,4 @@
-const BASE_API = '/api';
+const BASE_API = 'http://localhost:8080/api';
 
 export const API_ENDPOINTS = {
   WORKLOG: `${BASE_API}/worklog`,
