@@ -70,6 +70,10 @@ INSERT INTO activities (name, active)
 SELECT 'Documentation', true
 WHERE NOT EXISTS (SELECT 1 FROM activities WHERE name = 'Documentation');
 
+INSERT INTO activities (name, active)
+SELECT 'Break', true
+WHERE NOT EXISTS (SELECT 1 FROM activities WHERE name = 'Break');
+
 -- Subactivities: Development
 INSERT INTO subactivities (activity_id, name, active)
 SELECT a.id, 'Feature Implementation', true
@@ -237,3 +241,52 @@ WHERE a.name = 'Documentation'
     SELECT 1 FROM subactivities s
     WHERE s.activity_id = a.id AND s.name = 'User Guide'
   );
+
+-- Subactivities: Break
+INSERT INTO subactivities (activity_id, name, active)
+SELECT a.id, 'Lunch Break', true
+FROM activities a
+WHERE a.name = 'Break'
+  AND NOT EXISTS (
+    SELECT 1 FROM subactivities s
+    WHERE s.activity_id = a.id AND s.name = 'Lunch Break'
+  );
+
+INSERT INTO subactivities (activity_id, name, active)
+SELECT a.id, 'Screen Break', true
+FROM activities a
+WHERE a.name = 'Break'
+  AND NOT EXISTS (
+    SELECT 1 FROM subactivities s
+    WHERE s.activity_id = a.id AND s.name = 'Screen Break'
+  );
+
+INSERT INTO subactivities (activity_id, name, active)
+SELECT a.id, 'Utility Break', true
+FROM activities a
+WHERE a.name = 'Break'
+  AND NOT EXISTS (
+    SELECT 1 FROM subactivities s
+    WHERE s.activity_id = a.id AND s.name = 'Utility Break'
+  );
+
+-- Employees
+INSERT INTO employees (name, email, department, role, active)
+SELECT 'Racha Cuca', 'rachacuca@example.com', 'Engineering', 'Developer', true
+    WHERE NOT EXISTS (SELECT 1 FROM employees WHERE email = 'rachacuca@example.com');
+
+INSERT INTO employees (name, email, department, role, active)
+SELECT 'Quase Nada', 'quasenada@example.com', 'Engineering', 'Developer', true
+    WHERE NOT EXISTS (SELECT 1 FROM employees WHERE email = 'quasenada@example.com');
+
+INSERT INTO employees (name, email, department, role, active)
+SELECT 'Tripa Seca', 'tripaseca@example.com', 'Engineering', 'Developer', true
+    WHERE NOT EXISTS (SELECT 1 FROM employees WHERE email = 'tripaseca@example.com');
+
+INSERT INTO employees (name, email, department, role, active)
+SELECT 'Poucas Trancas', 'poucastrancas@example.com', 'Engineering', 'Developer', true
+    WHERE NOT EXISTS (SELECT 1 FROM employees WHERE email = 'poucastrancas@example.com');
+
+INSERT INTO employees (name, email, department, role, active)
+SELECT 'Alma Negra', 'almanegra@example.com', 'Engineering', 'Developer', true
+    WHERE NOT EXISTS (SELECT 1 FROM employees WHERE email = 'almanegra@example.com');

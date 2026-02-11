@@ -1,5 +1,6 @@
-import { AsyncPipe, NgIf } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { AsyncPipe, NgFor, NgIf } from '@angular/common';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { StartActivityRequest } from '../../models/worklog.model';
 import { WorklogStoreService } from '../../state/worklog-store.services';
 import { ActivityFormComponent } from '../../components/activity-form/activity-form.component';
@@ -12,6 +13,7 @@ import { todayApiDate } from '../../../../shared/utils/date.utils';
   selector: 'app-worklog-page',
   imports: [
     NgIf,
+    NgFor,
     AsyncPipe,
     ActivityFormComponent,
     ActivityTableComponent,
@@ -21,25 +23,52 @@ import { todayApiDate } from '../../../../shared/utils/date.utils';
   templateUrl: './worklog-page.component.html',
   styleUrl: './worklog-page.component.scss',
 })
-export class WorklogPageComponent implements OnInit {
-  readonly employeeId = 1;
+export class WorklogPageComponent implements OnInit, OnDestroy {
   readonly state$;
+  private stateSubscription?: Subscription;
+  private lastSelectedEmployeeId: number | null = null;
 
   constructor(private readonly worklogStore: WorklogStoreService) {
     this.state$ = this.worklogStore.state$;
   }
 
   ngOnInit(): void {
-    const today = todayApiDate();
     this.worklogStore.loadLookups();
-    this.worklogStore.loadWorkDay(this.employeeId, today);
+    this.worklogStore.loadEmployees();
+
+    this.stateSubscription = this.worklogStore.state$.subscribe((state) => {
+      if (state.selectedEmployeeId != null && state.selectedEmployeeId !== this.lastSelectedEmployeeId) {
+        this.lastSelectedEmployeeId = state.selectedEmployeeId;
+        this.worklogStore.loadWorkDay(state.selectedEmployeeId, todayApiDate());
+      }
+    });
   }
 
   onStartActivity(payload: StartActivityRequest): void {
-    this.worklogStore.startActivity(this.employeeId, payload);
+    const selectedEmployeeId = this.worklogStore.getSelectedEmployeeId();
+    if (selectedEmployeeId == null) {
+      return;
+    }
+    this.worklogStore.startActivity(selectedEmployeeId, payload);
   }
 
   onSaveDay(): void {
-    this.worklogStore.saveDay(this.employeeId);
+    const selectedEmployeeId = this.worklogStore.getSelectedEmployeeId();
+    if (selectedEmployeeId == null) {
+      return;
+    }
+    this.worklogStore.saveDay(selectedEmployeeId);
+  }
+
+  onEmployeeChange(employeeId: string): void {
+    const parsedEmployeeId = Number(employeeId);
+    if (!Number.isFinite(parsedEmployeeId) || parsedEmployeeId <= 0) {
+      return;
+    }
+    this.worklogStore.selectEmployee(parsedEmployeeId, todayApiDate());
+  }
+
+  ngOnDestroy(): void {
+    this.stateSubscription?.unsubscribe();
   }
 }

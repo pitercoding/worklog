@@ -18,6 +18,10 @@ public class EmployeeService {
         return employeeRepository.findAll();
     }
 
+    public List<Employee> getActiveEmployees() {
+        return employeeRepository.findAllByActiveTrue();
+    }
+
     public Employee getById(Long id) {
         return employeeRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Employee not found: " + id));

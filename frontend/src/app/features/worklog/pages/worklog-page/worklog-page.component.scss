@@ -12,6 +12,31 @@
   margin-bottom: 20px;
 }
 
+.header-actions {
+  display: flex;
+  align-items: end;
+  gap: 12px;
+}
+
+.user-box {
+  display: grid;
+  gap: 6px;
+}
+
+.user-box label {
+  color: var(--text-muted);
+  font-size: 0.82rem;
+}
+
+.user-box select {
+  border: 1px solid rgba(111, 168, 255, 0.35);
+  background: rgba(8, 15, 27, 0.85);
+  color: var(--text-main);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  min-width: 220px;
+}
+
 .eyebrow {
   margin: 0 0 4px;
   font-size: 12px;
@@ -105,5 +130,16 @@ h2 {
   .page-header {
     align-items: start;
     flex-direction: column;
+  }
+
+  .header-actions {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .user-box select {
+    min-width: 0;
+    width: 100%;
   }
 }

@@ -3,7 +3,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, finalize } from 'rxjs';
 import { LookupApiService } from '../services/lookup-api.services';
 import { WorklogApiService } from '../services/worklog-api.services';
-import { LookupResponse } from '../models/lookup.model';
+import { EmployeeItem, LookupResponse } from '../models/lookup.model';
 import {
   ActivityEntryResponse,
   StartActivityRequest,
@@ -11,6 +11,8 @@ import {
 } from '../models/worklog.model';
 
 interface WorklogState {
+  employees: EmployeeItem[];
+  selectedEmployeeId: number | null;
   lookups: LookupResponse | null;
   workDay: WorkDayResponse | null;
   entries: ActivityEntryResponse[];
@@ -24,6 +26,8 @@ interface WorklogState {
 })
 export class WorklogStoreService {
   private readonly stateSubject = new BehaviorSubject<WorklogState>({
+    employees: [],
+    selectedEmployeeId: null,
     lookups: null,
     workDay: null,
     entries: [],
@@ -50,6 +54,32 @@ export class WorklogStoreService {
         error: (error: HttpErrorResponse) =>
           this.patchState({ error: this.resolveErrorMessage(error) }),
       });
+  }
+
+  loadEmployees(): void {
+    this.patchState({ loading: true, error: null });
+
+    this.lookupApiService
+      .getEmployees()
+      .pipe(finalize(() => this.patchState({ loading: false })))
+      .subscribe({
+        next: (employees) =>
+          this.patchState({
+            employees,
+            selectedEmployeeId: employees.length > 0 ? employees[0].id : null,
+          }),
+        error: (error: HttpErrorResponse) =>
+          this.patchState({ error: this.resolveErrorMessage(error) }),
+      });
+  }
+
+  selectEmployee(employeeId: number, date: string): void {
+    this.patchState({ selectedEmployeeId: employeeId, error: null });
+    this.loadWorkDay(employeeId, date);
+  }
+
+  getSelectedEmployeeId(): number | null {
+    return this.stateSubject.value.selectedEmployeeId;
   }
 
   loadWorkDay(employeeId: number, date: string): void {

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { LookupResponse, SubactivityItem } from '../models/lookup.model';
+import { EmployeeItem, LookupResponse, SubactivityItem } from '../models/lookup.model';
 import { API_ENDPOINTS } from '../../../core/constants/api-endpoints';
 
 @Injectable({
@@ -16,5 +16,9 @@ export class LookupApiService {
 
   getSubactivities(activityId: number): Observable<SubactivityItem[]> {
     return this.http.get<SubactivityItem[]>(API_ENDPOINTS.lookupSubactivitiesByActivity(activityId));
+  }
+
+  getEmployees(): Observable<EmployeeItem[]> {
+    return this.http.get<EmployeeItem[]>(API_ENDPOINTS.EMPLOYEES);
   }
 }

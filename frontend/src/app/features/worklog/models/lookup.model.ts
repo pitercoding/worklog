@@ -16,3 +16,9 @@ export interface LookupResponse {
   activities: LookupItem[];
   subactivities: SubactivityItem[];
 }
+
+export interface EmployeeItem {
+  id: number;
+  name: string;
+  email: string;
+}

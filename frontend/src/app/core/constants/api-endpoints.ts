@@ -3,6 +3,7 @@ const BASE_API = 'http://localhost:8080/api';
 export const API_ENDPOINTS = {
   WORKLOG: `${BASE_API}/worklog`,
   LOOKUPS: `${BASE_API}/lookups`,
+  EMPLOYEES: `${BASE_API}/employees`,
   SUBACTIVITIES: `${BASE_API}/lookups/subactivities`,
 
   worklogStartByEmployee: (employeeId: number) => `${BASE_API}/worklog/${employeeId}/start`,
