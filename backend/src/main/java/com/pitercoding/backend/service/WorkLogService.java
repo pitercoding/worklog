@@ -1,6 +1,7 @@
 package com.pitercoding.backend.service;
 
 import com.pitercoding.backend.model.ActivityEntry;
+import com.pitercoding.backend.model.Subactivity;
 import com.pitercoding.backend.model.WorkDay;
 import com.pitercoding.backend.model.WorkDayStatus;
 import org.springframework.stereotype.Service;
@@ -54,7 +55,13 @@ public class WorkLogService {
         OffsetDateTime now = OffsetDateTime.now();
         LocalDate today = now.toLocalDate();
 
-        WorkDay workDay = workDayService.findOpenByEmployeeAndDate(employeeId, today)
+        WorkDay workDay = workDayService.findByEmployeeAndDate(employeeId, today)
+                .map(existing -> {
+                    if (existing.getStatus() == WorkDayStatus.FINISHED) {
+                        throw new IllegalStateException("Workday is already finished for employee: " + employeeId);
+                    }
+                    return existing;
+                })
                 .orElseGet(() -> {
                     WorkDay created = new WorkDay();
                     created.setEmployee(employeeService.getById(employeeId));
@@ -67,13 +74,19 @@ public class WorkLogService {
         activityEntryService.findOpenByWorkDayId(workDay.getId())
                 .ifPresent(open -> closeEntry(open, now));
 
+        Subactivity subactivity = subactivityService.getById(subactivityId);
+        if (subactivity.getActivity() == null || subactivity.getActivity().getId() == null
+                || !subactivity.getActivity().getId().equals(activityId)) {
+            throw new IllegalArgumentException("Subactivity does not belong to the selected activity");
+        }
+
         ActivityEntry entry = new ActivityEntry();
         entry.setWorkDay(workDay);
         entry.setProgram(programService.getById(programId));
         entry.setTeam(teamService.getById(teamId));
         entry.setLanguage(languageService.getById(languageId));
         entry.setActivity(activityService.getById(activityId));
-        entry.setSubactivity(subactivityService.getById(subactivityId));
+        entry.setSubactivity(subactivity);
         entry.setStartedAt(now);
         entry.setNote(note);
 
