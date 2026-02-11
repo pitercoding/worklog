@@ -1,12 +1,19 @@
-import { Component, signal } from '@angular/core';
+import { AsyncPipe, NgIf } from '@angular/common';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { LoadingStateService } from './core/http/loading-state.services';
+import { ToastContainerComponent } from './core/ui/toast-container.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [NgIf, AsyncPipe, RouterOutlet, ToastContainerComponent],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  protected readonly title = signal('frontend');
+  readonly isLoading$;
+
+  constructor(private readonly loadingStateService: LoadingStateService) {
+    this.isLoading$ = this.loadingStateService.isLoading$;
+  }
 }
