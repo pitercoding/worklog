@@ -1,0 +1,28 @@
+.summary-card {
+  margin-top: 12px;
+  border: 1px solid rgba(87, 255, 162, 0.2);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  background: rgba(8, 15, 27, 0.5);
+}
+
+h3 {
+  margin: 0 0 10px;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.metric-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  color: var(--text-muted);
+}
+
+strong {
+  color: var(--text-main);
+  font-family: 'JetBrains Mono', monospace;
+}

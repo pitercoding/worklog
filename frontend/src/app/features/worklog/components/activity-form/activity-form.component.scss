@@ -1,0 +1,43 @@
+.activity-form {
+  display: grid;
+  gap: 12px;
+}
+
+label {
+  display: grid;
+  gap: 6px;
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+
+select,
+input {
+  border: 1px solid rgba(111, 168, 255, 0.35);
+  background: rgba(8, 15, 27, 0.85);
+  color: var(--text-main);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  outline: none;
+}
+
+select:focus,
+input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(86, 212, 255, 0.15);
+}
+
+button {
+  justify-self: start;
+  border: 1px solid rgba(86, 212, 255, 0.5);
+  background: linear-gradient(120deg, rgba(86, 212, 255, 0.26), rgba(87, 255, 162, 0.18));
+  color: var(--text-main);
+  border-radius: var(--radius-sm);
+  padding: 10px 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}

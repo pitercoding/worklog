@@ -1,1 +1,50 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap');
+
+:root {
+  --bg-0: #0a111f;
+  --bg-1: #0f1b2d;
+  --bg-2: #14243a;
+  --surface: rgba(15, 27, 45, 0.85);
+  --surface-border: rgba(111, 168, 255, 0.25);
+  --text-main: #e9f1ff;
+  --text-muted: #9fb0c9;
+  --accent: #56d4ff;
+  --accent-2: #57ffa2;
+  --danger: #ff7f96;
+  --radius-lg: 16px;
+  --radius-md: 12px;
+  --radius-sm: 8px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  font-family: 'Space Grotesk', sans-serif;
+  color: var(--text-main);
+  background:
+    radial-gradient(circle at 15% 15%, rgba(86, 212, 255, 0.18), transparent 40%),
+    radial-gradient(circle at 80% 0%, rgba(87, 255, 162, 0.12), transparent 35%),
+    linear-gradient(160deg, var(--bg-0), var(--bg-1) 45%, var(--bg-2));
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+code,
+pre {
+  font-family: 'JetBrains Mono', monospace;
+}

@@ -1,0 +1,27 @@
+.timer-card {
+  border: 1px solid rgba(86, 212, 255, 0.18);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  background: rgba(8, 15, 27, 0.5);
+}
+
+h3 {
+  margin: 0 0 8px;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.timer-value {
+  margin: 0;
+  color: var(--accent-2);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+.timer-idle {
+  margin: 0;
+  color: var(--text-muted);
+}

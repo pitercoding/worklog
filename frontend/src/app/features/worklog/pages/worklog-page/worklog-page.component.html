@@ -1,7 +1,10 @@
 <section class="worklog-page" *ngIf="state$ | async as state">
   <header class="page-header">
-    <h1>Worklog</h1>
-    <button type="button" (click)="onSaveDay()" [disabled]="state.loading">
+    <div>
+      <p class="eyebrow">Team Productivity Console</p>
+      <h1>Worklog</h1>
+    </div>
+    <button class="save-button" type="button" (click)="onSaveDay()" [disabled]="state.loading">
       Save Day
     </button>
   </header>
@@ -28,6 +31,6 @@
     </article>
   </div>
 
-  <p class="status" *ngIf="state.loading">Loading...</p>
+  <p class="status" *ngIf="state.loading">Loading data...</p>
   <p class="status error" *ngIf="state.error">{{ state.error }}</p>
 </section>

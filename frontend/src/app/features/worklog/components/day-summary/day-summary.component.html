@@ -1,5 +1,11 @@
-<section>
+<section class="summary-card">
   <h3>Day Summary</h3>
-  <p>Total activities: {{ totalActivities }}</p>
-  <p>Total duration: {{ totalSeconds | duration }}</p>
+  <div class="metric-row">
+    <span>Total activities</span>
+    <strong>{{ totalActivities }}</strong>
+  </div>
+  <div class="metric-row">
+    <span>Total duration</span>
+    <strong>{{ totalSeconds | duration }}</strong>
+  </div>
 </section>
