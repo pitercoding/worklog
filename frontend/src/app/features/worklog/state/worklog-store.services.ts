@@ -17,6 +17,7 @@ interface WorklogState {
   workDay: WorkDayResponse | null;
   entries: ActivityEntryResponse[];
   currentEntry: ActivityEntryResponse | null;
+  noWorkdayForSelectedDate: boolean;
   loading: boolean;
   error: string | null;
 }
@@ -32,6 +33,7 @@ export class WorklogStoreService {
     workDay: null,
     entries: [],
     currentEntry: null,
+    noWorkdayForSelectedDate: false,
     loading: false,
     error: null,
   });
@@ -74,7 +76,14 @@ export class WorklogStoreService {
   }
 
   selectEmployee(employeeId: number, date: string): void {
-    this.patchState({ selectedEmployeeId: employeeId, error: null });
+    this.patchState({
+      selectedEmployeeId: employeeId,
+      workDay: null,
+      entries: [],
+      currentEntry: null,
+      noWorkdayForSelectedDate: false,
+      error: null,
+    });
     this.loadWorkDay(employeeId, date);
   }
 
@@ -94,6 +103,7 @@ export class WorklogStoreService {
             workDay,
             entries: workDay.entries,
             currentEntry: workDay.currentEntry,
+            noWorkdayForSelectedDate: false,
           }),
         error: (error: HttpErrorResponse) => {
           if (error.status === 404) {
@@ -101,6 +111,7 @@ export class WorklogStoreService {
               workDay: null,
               entries: [],
               currentEntry: null,
+              noWorkdayForSelectedDate: true,
               error: null,
             });
             return;
@@ -117,7 +128,33 @@ export class WorklogStoreService {
       .startActivity(employeeId, payload)
       .pipe(finalize(() => this.patchState({ loading: false })))
       .subscribe({
-        next: () => this.loadWorkDay(employeeId, this.todayIso()),
+        next: (startedEntry) => {
+          const nowIso = new Date().toISOString();
+          const currentEntries = this.stateSubject.value.entries;
+          const currentOpenEntry = this.stateSubject.value.currentEntry;
+
+          const closedEntries = currentEntries.map((entry) => {
+            if (currentOpenEntry && entry.id === currentOpenEntry.id && entry.finishedAt == null) {
+              const elapsedSeconds = Math.max(
+                0,
+                Math.floor((new Date(nowIso).getTime() - new Date(entry.startedAt).getTime()) / 1000)
+              );
+              return {
+                ...entry,
+                finishedAt: nowIso,
+                durationSeconds: elapsedSeconds,
+              };
+            }
+            return entry;
+          });
+
+          this.patchState({
+            entries: [...closedEntries, startedEntry],
+            currentEntry: startedEntry,
+            noWorkdayForSelectedDate: false,
+            error: null,
+          });
+        },
         error: (error: HttpErrorResponse) =>
           this.patchState({ error: this.resolveErrorMessage(error) }),
       });
@@ -135,6 +172,7 @@ export class WorklogStoreService {
             workDay,
             entries: workDay.entries,
             currentEntry: workDay.currentEntry,
+            noWorkdayForSelectedDate: false,
           }),
         error: (error: HttpErrorResponse) =>
           this.patchState({ error: this.resolveErrorMessage(error) }),
@@ -154,9 +192,5 @@ export class WorklogStoreService {
       return apiMessage;
     }
     return error.message || 'Unexpected error';
-  }
-
-  private todayIso(): string {
-    return new Date().toISOString().slice(0, 10);
   }
 }

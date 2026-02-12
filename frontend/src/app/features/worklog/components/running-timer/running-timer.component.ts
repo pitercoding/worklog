@@ -1,7 +1,8 @@
 import { NgIf } from '@angular/common';
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { interval, Subscription } from 'rxjs';
 import { DurationPipe } from '../../../../shared/pipes/duration.pipe';
+import { ActivityEntryResponse } from '../../models/worklog.model';
 
 @Component({
   selector: 'app-running-timer',
@@ -9,8 +10,9 @@ import { DurationPipe } from '../../../../shared/pipes/duration.pipe';
   templateUrl: './running-timer.component.html',
   styleUrl: './running-timer.component.scss',
 })
-export class RunningTimerComponent implements OnInit, OnDestroy {
+export class RunningTimerComponent implements OnInit, OnChanges, OnDestroy {
   @Input() startedAt: string | null = null;
+  @Input() currentEntry: ActivityEntryResponse | null = null;
   elapsedSeconds = 0;
 
   private timerSubscription?: Subscription;
@@ -20,6 +22,12 @@ export class RunningTimerComponent implements OnInit, OnDestroy {
       this.elapsedSeconds = this.calculateElapsedSeconds();
     });
     this.elapsedSeconds = this.calculateElapsedSeconds();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['startedAt']) {
+      this.elapsedSeconds = this.calculateElapsedSeconds();
+    }
   }
 
   ngOnDestroy(): void {

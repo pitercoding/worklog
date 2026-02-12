@@ -2,7 +2,7 @@
   <label>
     Program
     <select formControlName="programId">
-      <option [ngValue]="0">Select...</option>
+      <option [ngValue]="0">Select a program...</option>
       <option *ngFor="let item of lookups?.programs" [ngValue]="item.id">{{ item.name }}</option>
     </select>
   </label>
@@ -10,7 +10,7 @@
   <label>
     Team
     <select formControlName="teamId">
-      <option [ngValue]="0">Select...</option>
+      <option [ngValue]="0">Select a team...</option>
       <option *ngFor="let item of lookups?.teams" [ngValue]="item.id">{{ item.name }}</option>
     </select>
   </label>
@@ -18,7 +18,7 @@
   <label>
     Language
     <select formControlName="languageId">
-      <option [ngValue]="0">Select...</option>
+      <option [ngValue]="0">Select a language...</option>
       <option *ngFor="let item of lookups?.languages" [ngValue]="item.id">{{ item.name }}</option>
     </select>
   </label>
@@ -26,7 +26,7 @@
   <label>
     Activity
     <select formControlName="activityId">
-      <option [ngValue]="0">Select...</option>
+      <option [ngValue]="0">Select an activity...</option>
       <option *ngFor="let item of lookups?.activities" [ngValue]="item.id">{{ item.name }}</option>
     </select>
   </label>
@@ -34,14 +34,14 @@
   <label>
     Subactivity
     <select formControlName="subactivityId">
-      <option [ngValue]="0">Select...</option>
+      <option [ngValue]="0">Select a subactivity...</option>
       <option *ngFor="let item of filteredSubactivities" [ngValue]="item.id">{{ item.name }}</option>
     </select>
   </label>
 
   <label>
     Note
-    <input type="text" formControlName="note" />
+    <input type="text" formControlName="note" placeholder="Optional note..." />
   </label>
 
   <button type="submit" [disabled]="form.invalid || loading">New</button>

@@ -70,17 +70,8 @@ export class WorklogPageComponent implements OnInit {
 
   showNoWorkdayMessage(state: {
     selectedEmployeeId: number | null;
-    workDay: unknown;
-    entries: unknown[];
-    loading: boolean;
-    error: string | null;
+    noWorkdayForSelectedDate: boolean;
   }): boolean {
-    return (
-      state.selectedEmployeeId != null &&
-      !state.loading &&
-      !state.error &&
-      !state.workDay &&
-      state.entries.length === 0
-    );
+    return state.selectedEmployeeId != null && state.noWorkdayForSelectedDate;
   }
 }

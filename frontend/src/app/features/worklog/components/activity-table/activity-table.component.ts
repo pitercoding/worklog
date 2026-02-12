@@ -12,6 +12,14 @@ import { DurationPipe } from '../../../../shared/pipes/duration.pipe';
 export class ActivityTableComponent {
   @Input() entries: ActivityEntryResponse[] = [];
 
+  get sortedEntries(): ActivityEntryResponse[] {
+    return [...this.entries].sort((a, b) => {
+      const aTime = new Date(a.startedAt).getTime();
+      const bTime = new Date(b.startedAt).getTime();
+      return bTime - aTime;
+    });
+  }
+
   trackByEntryId(index: number, item: ActivityEntryResponse): number {
     return item.id ?? index;
   }

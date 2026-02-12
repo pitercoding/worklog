@@ -27,22 +27,28 @@
 
   <div class="grid">
     <article class="panel">
-      <h2>Form</h2>
+      <h2>New Activity</h2>
       <app-activity-form
         [lookups]="state.lookups"
         [loading]="state.loading || !state.selectedEmployeeId"
         (startActivity)="onStartActivity($event)"
       />
+      <p class="status info" *ngIf="!state.selectedEmployeeId">
+        Select an employee to start tracking activities.
+      </p>
     </article>
 
     <article class="panel">
       <h2>Timer / Summary</h2>
-      <app-running-timer [startedAt]="state.currentEntry?.startedAt ?? null" />
+      <app-running-timer
+        [startedAt]="state.currentEntry?.startedAt ?? null"
+        [currentEntry]="state.currentEntry"
+      />
       <app-day-summary [entries]="state.entries" />
     </article>
 
     <article class="panel">
-      <h2>Table</h2>
+      <h2>Activity History</h2>
       <app-activity-table [entries]="state.entries" />
     </article>
   </div>

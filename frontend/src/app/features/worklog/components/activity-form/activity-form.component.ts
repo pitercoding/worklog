@@ -57,6 +57,16 @@ export class ActivityFormComponent implements OnInit, OnChanges {
       subactivityId: value.subactivityId,
       note: value.note?.trim() || undefined,
     });
+
+    this.form.reset({
+      programId: 0,
+      teamId: 0,
+      languageId: 0,
+      activityId: 0,
+      subactivityId: 0,
+      note: '',
+    });
+    this.filteredSubactivities = [];
   }
 
   private updateSubactivities(activityId: number): void {

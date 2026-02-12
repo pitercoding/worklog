@@ -1,32 +1,37 @@
-<table *ngIf="entries.length > 0; else emptyState">
-  <thead>
-    <tr>
-      <th>Program</th>
-      <th>Team</th>
-      <th>Language</th>
-      <th>Activity</th>
-      <th>Subactivity</th>
-      <th>Start</th>
-      <th>End</th>
-      <th>Duration</th>
-      <th>Note</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let entry of entries; trackBy: trackByEntryId">
-      <td>{{ entry.program.name }}</td>
-      <td>{{ entry.team.name }}</td>
-      <td>{{ entry.language.name }}</td>
-      <td>{{ entry.activity.name }}</td>
-      <td>{{ entry.subactivity.name }}</td>
-      <td>{{ entry.startedAt | date: 'shortTime' }}</td>
-      <td>{{ entry.finishedAt ? (entry.finishedAt | date: 'shortTime') : '-' }}</td>
-      <td>{{ entry.durationSeconds | duration }}</td>
-      <td>{{ entry.note || '-' }}</td>
-    </tr>
-  </tbody>
-</table>
+<div class="table-scroll" *ngIf="entries.length > 0; else emptyState">
+  <table>
+    <thead>
+      <tr>
+        <th>Program</th>
+        <th>Team</th>
+        <th>Language</th>
+        <th>Activity</th>
+        <th>Subactivity</th>
+        <th>Start</th>
+        <th>End</th>
+        <th>Duration</th>
+        <th>Note</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        *ngFor="let entry of sortedEntries; trackBy: trackByEntryId"
+        [class.row-running]="!entry.finishedAt"
+      >
+        <td>{{ entry.program.name }}</td>
+        <td>{{ entry.team.name }}</td>
+        <td>{{ entry.language.name }}</td>
+        <td>{{ entry.activity.name }}</td>
+        <td>{{ entry.subactivity.name }}</td>
+        <td>{{ entry.startedAt | date: 'shortTime' }}</td>
+        <td>{{ entry.finishedAt ? (entry.finishedAt | date: 'shortTime') : '-' }}</td>
+        <td>{{ entry.durationSeconds | duration }}</td>
+        <td>{{ entry.note || '-' }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
 <ng-template #emptyState>
-  <p>No activities yet.</p>
+  <p>No activities logged yet. Start a new activity to populate this table.</p>
 </ng-template>
