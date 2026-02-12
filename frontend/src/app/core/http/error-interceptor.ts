@@ -8,6 +8,15 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
+      const isExpectedNoWorkday404 =
+        error.status === 404 &&
+        req.method === 'GET' &&
+        req.url.includes('/api/worklog/');
+
+      if (isExpectedNoWorkday404) {
+        return throwError(() => error);
+      }
+
       const backendMessage = error.error?.message;
       const message =
         typeof backendMessage === 'string' && backendMessage.length > 0

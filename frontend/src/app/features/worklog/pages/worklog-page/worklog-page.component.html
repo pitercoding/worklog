@@ -48,5 +48,8 @@
   </div>
 
   <p class="status" *ngIf="state.loading">Loading data...</p>
+  <p class="status info" *ngIf="showNoWorkdayMessage(state)">
+    No workday for employee: {{ selectedEmployeeName(state) }}
+  </p>
   <p class="status error" *ngIf="state.error">{{ state.error }}</p>
 </section>

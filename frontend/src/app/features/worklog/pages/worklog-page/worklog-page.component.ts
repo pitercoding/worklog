@@ -1,6 +1,5 @@
 import { AsyncPipe, NgFor, NgIf } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
 import { StartActivityRequest } from '../../models/worklog.model';
 import { WorklogStoreService } from '../../state/worklog-store.services';
 import { ActivityFormComponent } from '../../components/activity-form/activity-form.component';
@@ -23,10 +22,8 @@ import { todayApiDate } from '../../../../shared/utils/date.utils';
   templateUrl: './worklog-page.component.html',
   styleUrl: './worklog-page.component.scss',
 })
-export class WorklogPageComponent implements OnInit, OnDestroy {
+export class WorklogPageComponent implements OnInit {
   readonly state$;
-  private stateSubscription?: Subscription;
-  private lastSelectedEmployeeId: number | null = null;
 
   constructor(private readonly worklogStore: WorklogStoreService) {
     this.state$ = this.worklogStore.state$;
@@ -35,13 +32,6 @@ export class WorklogPageComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.worklogStore.loadLookups();
     this.worklogStore.loadEmployees();
-
-    this.stateSubscription = this.worklogStore.state$.subscribe((state) => {
-      if (state.selectedEmployeeId != null && state.selectedEmployeeId !== this.lastSelectedEmployeeId) {
-        this.lastSelectedEmployeeId = state.selectedEmployeeId;
-        this.worklogStore.loadWorkDay(state.selectedEmployeeId, todayApiDate());
-      }
-    });
   }
 
   onStartActivity(payload: StartActivityRequest): void {
@@ -68,7 +58,29 @@ export class WorklogPageComponent implements OnInit, OnDestroy {
     this.worklogStore.selectEmployee(parsedEmployeeId, todayApiDate());
   }
 
-  ngOnDestroy(): void {
-    this.stateSubscription?.unsubscribe();
+  selectedEmployeeName(state: {
+    employees: { id: number; name: string }[];
+    selectedEmployeeId: number | null;
+  }): string {
+    if (state.selectedEmployeeId == null) {
+      return '';
+    }
+    return state.employees.find((employee) => employee.id === state.selectedEmployeeId)?.name ?? '';
+  }
+
+  showNoWorkdayMessage(state: {
+    selectedEmployeeId: number | null;
+    workDay: unknown;
+    entries: unknown[];
+    loading: boolean;
+    error: string | null;
+  }): boolean {
+    return (
+      state.selectedEmployeeId != null &&
+      !state.loading &&
+      !state.error &&
+      !state.workDay &&
+      state.entries.length === 0
+    );
   }
 }

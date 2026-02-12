@@ -66,7 +66,7 @@ export class WorklogStoreService {
         next: (employees) =>
           this.patchState({
             employees,
-            selectedEmployeeId: employees.length > 0 ? employees[0].id : null,
+            selectedEmployeeId: null,
           }),
         error: (error: HttpErrorResponse) =>
           this.patchState({ error: this.resolveErrorMessage(error) }),
