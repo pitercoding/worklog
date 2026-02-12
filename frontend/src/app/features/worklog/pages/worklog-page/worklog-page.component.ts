@@ -1,4 +1,4 @@
-import { AsyncPipe, NgFor, NgIf } from '@angular/common';
+import { AsyncPipe, DatePipe, NgFor, NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { StartActivityRequest } from '../../models/worklog.model';
 import { WorklogStoreService } from '../../state/worklog-store.services';
@@ -14,6 +14,7 @@ import { todayApiDate } from '../../../../shared/utils/date.utils';
     NgIf,
     NgFor,
     AsyncPipe,
+    DatePipe,
     ActivityFormComponent,
     ActivityTableComponent,
     RunningTimerComponent,

@@ -1,4 +1,4 @@
-import { NgFor } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LookupResponse, SubactivityItem } from '../../models/lookup.model';
@@ -6,13 +6,14 @@ import { StartActivityRequest } from '../../models/worklog.model';
 
 @Component({
   selector: 'app-activity-form',
-  imports: [NgFor, ReactiveFormsModule],
+  imports: [NgFor, NgIf, ReactiveFormsModule],
   templateUrl: './activity-form.component.html',
   styleUrl: './activity-form.component.scss',
 })
 export class ActivityFormComponent implements OnInit, OnChanges {
   @Input() lookups: LookupResponse | null = null;
   @Input() loading = false;
+  @Input() dayFinished = false;
   @Output() startActivity = new EventEmitter<StartActivityRequest>();
 
   filteredSubactivities: SubactivityItem[] = [];
@@ -39,6 +40,14 @@ export class ActivityFormComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['lookups']?.currentValue && this.lookups) {
       this.updateSubactivities(this.form.controls.activityId.value);
+    }
+
+    if (changes['dayFinished']) {
+      if (this.dayFinished) {
+        this.form.disable({ emitEvent: false });
+      } else {
+        this.form.enable({ emitEvent: false });
+      }
     }
   }
 

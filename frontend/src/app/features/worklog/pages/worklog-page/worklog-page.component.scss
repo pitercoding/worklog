@@ -83,6 +83,15 @@ h1 {
     'table table';
 }
 
+.day-finished-banner {
+  margin: 0 0 14px;
+  padding: 10px 12px;
+  border: 1px solid rgba(87, 255, 162, 0.35);
+  border-radius: var(--radius-sm);
+  background: rgba(87, 255, 162, 0.1);
+  color: var(--text-main);
+}
+
 .panel {
   background: var(--surface);
   border: 1px solid var(--surface-border);

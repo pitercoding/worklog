@@ -4,6 +4,7 @@ import { BehaviorSubject, finalize } from 'rxjs';
 import { LookupApiService } from '../services/lookup-api.services';
 import { WorklogApiService } from '../services/worklog-api.services';
 import { EmployeeItem, LookupResponse } from '../models/lookup.model';
+import { NotificationService } from '../../../core/ui/notification.services';
 import {
   ActivityEntryResponse,
   StartActivityRequest,
@@ -42,7 +43,8 @@ export class WorklogStoreService {
 
   constructor(
     private readonly lookupApiService: LookupApiService,
-    private readonly worklogApiService: WorklogApiService
+    private readonly worklogApiService: WorklogApiService,
+    private readonly notificationService: NotificationService
   ) {}
 
   loadLookups(): void {
@@ -168,12 +170,15 @@ export class WorklogStoreService {
       .pipe(finalize(() => this.patchState({ loading: false })))
       .subscribe({
         next: (workDay) =>
-          this.patchState({
-            workDay,
-            entries: workDay.entries,
-            currentEntry: workDay.currentEntry,
-            noWorkdayForSelectedDate: false,
-          }),
+          {
+            this.patchState({
+              workDay,
+              entries: workDay.entries,
+              currentEntry: workDay.currentEntry,
+              noWorkdayForSelectedDate: false,
+            });
+            this.notificationService.success('Workday saved successfully.');
+          },
         error: (error: HttpErrorResponse) =>
           this.patchState({ error: this.resolveErrorMessage(error) }),
       });

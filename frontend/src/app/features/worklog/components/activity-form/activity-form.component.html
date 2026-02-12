@@ -44,5 +44,9 @@
     <input type="text" formControlName="note" placeholder="Optional note..." />
   </label>
 
-  <button type="submit" [disabled]="form.invalid || loading">New</button>
+  <button type="submit" [disabled]="form.invalid || loading || dayFinished">New</button>
+
+  <p class="form-locked-message" *ngIf="dayFinished">
+    This workday is finished. Select another employee to continue.
+  </p>
 </form>

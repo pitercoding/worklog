@@ -19,11 +19,20 @@
         </select>
       </div>
 
-      <button class="save-button" type="button" (click)="onSaveDay()" [disabled]="state.loading || !state.selectedEmployeeId">
-        Save Day
+      <button
+        class="save-button"
+        type="button"
+        (click)="onSaveDay()"
+        [disabled]="state.loading || !state.selectedEmployeeId || state.workDay?.status === 'FINISHED'"
+      >
+        {{ state.workDay?.status === 'FINISHED' ? 'Day Saved' : 'Save Day' }}
       </button>
     </div>
   </header>
+
+  <p class="day-finished-banner" *ngIf="state.workDay?.status === 'FINISHED'">
+    Day finished at {{ state.workDay?.finishedAt | date: 'shortTime' }}.
+  </p>
 
   <div class="grid">
     <article class="panel">
@@ -31,6 +40,7 @@
       <app-activity-form
         [lookups]="state.lookups"
         [loading]="state.loading || !state.selectedEmployeeId"
+        [dayFinished]="state.workDay?.status === 'FINISHED'"
         (startActivity)="onStartActivity($event)"
       />
       <p class="status info" *ngIf="!state.selectedEmployeeId">
