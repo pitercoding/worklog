@@ -6,7 +6,6 @@ import { ActivityFormComponent } from '../../components/activity-form/activity-f
 import { ActivityTableComponent } from '../../components/activity-table/activity-table.component';
 import { DaySummaryComponent } from '../../components/day-summary/day-summary.component';
 import { RunningTimerComponent } from '../../components/running-timer/running-timer.component';
-import { todayApiDate } from '../../../../shared/utils/date.utils';
 
 @Component({
   selector: 'app-worklog-page',
@@ -56,7 +55,7 @@ export class WorklogPageComponent implements OnInit {
     if (!Number.isFinite(parsedEmployeeId) || parsedEmployeeId <= 0) {
       return;
     }
-    this.worklogStore.selectEmployee(parsedEmployeeId, todayApiDate());
+    this.worklogStore.selectEmployee(parsedEmployeeId);
   }
 
   selectedEmployeeName(state: {

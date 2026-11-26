@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.Clock;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -31,15 +32,18 @@ public class WorkLogController {
     private final WorkLogService workLogService;
     private final WorkDayService workDayService;
     private final ActivityEntryService activityEntryService;
+    private final Clock clock;
 
     public WorkLogController(
             WorkLogService workLogService,
             WorkDayService workDayService,
-            ActivityEntryService activityEntryService
+            ActivityEntryService activityEntryService,
+            Clock clock
     ) {
         this.workLogService = workLogService;
         this.workDayService = workDayService;
         this.activityEntryService = activityEntryService;
+        this.clock = clock;
     }
 
     @PostMapping("/{employeeId}/start")
@@ -70,9 +74,10 @@ public class WorkLogController {
     @GetMapping("/{employeeId}")
     public ResponseEntity<WorkDayResponse> getWorkDay(
             @PathVariable Long employeeId,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
     ) {
-        WorkDay workDay = workDayService.findByEmployeeAndDate(employeeId, date)
+        LocalDate day = date != null ? date : LocalDate.now(clock);
+        WorkDay workDay = workDayService.findByEmployeeAndDate(employeeId, day)
                 .orElseThrow(() -> new org.springframework.web.server.ResponseStatusException(
                         org.springframework.http.HttpStatus.NOT_FOUND,
                         "No workday for employee: " + employeeId

@@ -77,7 +77,7 @@ export class WorklogStoreService {
       });
   }
 
-  selectEmployee(employeeId: number, date: string): void {
+  selectEmployee(employeeId: number): void {
     this.patchState({
       selectedEmployeeId: employeeId,
       workDay: null,
@@ -86,18 +86,18 @@ export class WorklogStoreService {
       noWorkdayForSelectedDate: false,
       error: null,
     });
-    this.loadWorkDay(employeeId, date);
+    this.loadWorkDay(employeeId);
   }
 
   getSelectedEmployeeId(): number | null {
     return this.stateSubject.value.selectedEmployeeId;
   }
 
-  loadWorkDay(employeeId: number, date: string): void {
+  loadWorkDay(employeeId: number): void {
     this.patchState({ loading: true, error: null });
 
     this.worklogApiService
-      .getWorkDay(employeeId, date)
+      .getWorkDay(employeeId)
       .pipe(finalize(() => this.patchState({ loading: false })))
       .subscribe({
         next: (workDay) =>

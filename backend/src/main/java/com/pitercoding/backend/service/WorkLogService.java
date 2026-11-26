@@ -7,6 +7,7 @@ import com.pitercoding.backend.model.WorkDayStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Clock;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
@@ -21,6 +22,7 @@ public class WorkLogService {
     private final SubactivityService subactivityService;
     private final WorkDayService workDayService;
     private final ActivityEntryService activityEntryService;
+    private final Clock clock;
 
     public WorkLogService(
             EmployeeService employeeService,
@@ -30,7 +32,8 @@ public class WorkLogService {
             ActivityService activityService,
             SubactivityService subactivityService,
             WorkDayService workDayService,
-            ActivityEntryService activityEntryService
+            ActivityEntryService activityEntryService,
+            Clock clock
     ) {
         this.employeeService = employeeService;
         this.programService = programService;
@@ -40,6 +43,7 @@ public class WorkLogService {
         this.subactivityService = subactivityService;
         this.workDayService = workDayService;
         this.activityEntryService = activityEntryService;
+        this.clock = clock;
     }
 
     @Transactional
@@ -52,7 +56,7 @@ public class WorkLogService {
             Long subactivityId,
             String note
     ) {
-        OffsetDateTime now = OffsetDateTime.now();
+        OffsetDateTime now = OffsetDateTime.now(clock);
         LocalDate today = now.toLocalDate();
 
         WorkDay workDay = workDayService.findByEmployeeAndDate(employeeId, today)
@@ -95,7 +99,7 @@ public class WorkLogService {
 
     @Transactional
     public WorkDay saveDay(Long employeeId) {
-        OffsetDateTime now = OffsetDateTime.now();
+        OffsetDateTime now = OffsetDateTime.now(clock);
         LocalDate today = now.toLocalDate();
 
         WorkDay workDay = workDayService.findOpenByEmployeeAndDate(employeeId, today)
