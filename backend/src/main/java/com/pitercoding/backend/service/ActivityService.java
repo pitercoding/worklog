@@ -1,5 +1,6 @@
 package com.pitercoding.backend.service;
 
+import com.pitercoding.backend.exception.NotFoundException;
 import com.pitercoding.backend.model.Activity;
 import com.pitercoding.backend.repository.ActivityRepository;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,6 @@ public class ActivityService {
 
     public Activity getById(Long id) {
         return activityRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Activity not found: " + id));
+                .orElseThrow(() -> new NotFoundException("Activity not found: " + id));
     }
 }

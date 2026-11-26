@@ -100,7 +100,25 @@ class WorkLogFlowIntegrationTest {
 
     @Test
     void startActivity_rejectsASubactivityFromAnotherActivity() throws Exception {
-        start(activityId + 1_000_000).andExpect(status().is4xxClientError());
+        start(activityId + 1_000_000).andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void startActivity_returns404ForAnUnknownEmployee() throws Exception {
+        employeeId = 999_999;
+
+        start(activityId)
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Employee not found: 999999"));
+    }
+
+    @Test
+    void startActivity_returns404ForAnUnknownSubactivity() throws Exception {
+        subactivityId = 999_999;
+
+        start(activityId)
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Subactivity not found: 999999"));
     }
 
     @Test

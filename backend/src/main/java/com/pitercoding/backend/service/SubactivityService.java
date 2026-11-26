@@ -1,5 +1,6 @@
 package com.pitercoding.backend.service;
 
+import com.pitercoding.backend.exception.NotFoundException;
 import com.pitercoding.backend.model.Subactivity;
 import com.pitercoding.backend.repository.SubactivityRepository;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,6 @@ public class SubactivityService {
 
     public Subactivity getById(Long id) {
         return subactivityRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Subactivity not found: " + id));
+                .orElseThrow(() -> new NotFoundException("Subactivity not found: " + id));
     }
 }
