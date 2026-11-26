@@ -1,6 +1,7 @@
 package com.pitercoding.backend.dto;
 
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 public class StartActivityRequest {
     @NotNull
@@ -13,6 +14,7 @@ public class StartActivityRequest {
     private Long activityId;
     @NotNull
     private Long subactivityId;
+    @Size(max = 255)
     private String note;
 
     public Long getProgramId() {

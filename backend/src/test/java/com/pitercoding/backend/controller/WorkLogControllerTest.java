@@ -1,5 +1,6 @@
 package com.pitercoding.backend.controller;
 
+import com.pitercoding.backend.exception.NotFoundException;
 import com.pitercoding.backend.model.WorkDay;
 import com.pitercoding.backend.service.ActivityEntryService;
 import com.pitercoding.backend.service.WorkDayService;
@@ -111,6 +112,67 @@ class WorkLogControllerTest {
     void getWorkDay_returns400ForAnInvalidDate() throws Exception {
         mockMvc.perform(get("/api/worklog/1").param("date", "not-a-date"))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void start_returns404WhenTheEmployeeDoesNotExist() throws Exception {
+        when(workLogService.startActivity(any(), any(), any(), any(), any(), any(), any()))
+                .thenThrow(new NotFoundException("Employee not found: 99"));
+
+        mockMvc.perform(post("/api/worklog/99/start")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(validStartBody()))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Employee not found: 99"));
+    }
+
+    @Test
+    void start_returns400WhenTheNoteIsTooLong() throws Exception {
+        String body = "{\"programId\":1,\"teamId\":2,\"languageId\":3,\"activityId\":10,\"subactivityId\":100,\"note\":\""
+                + "x".repeat(256) + "\"}";
+
+        mockMvc.perform(post("/api/worklog/1/start")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value(org.hamcrest.Matchers.startsWith("note ")));
+    }
+
+    @Test
+    void start_returns400ForMalformedJson() throws Exception {
+        mockMvc.perform(post("/api/worklog/1/start")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{not json"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.path").value("/api/worklog/1/start"));
+    }
+
+    @Test
+    void start_returns500WithoutLeakingDetailsForUnexpectedErrors() throws Exception {
+        when(workLogService.startActivity(any(), any(), any(), any(), any(), any(), any()))
+                .thenThrow(new RuntimeException("secret internal detail"));
+
+        mockMvc.perform(post("/api/worklog/1/start")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(validStartBody()))
+                .andExpect(status().isInternalServerError())
+                .andExpect(jsonPath("$.message").value("Unexpected error"));
+    }
+
+    @Test
+    void unknownRoute_returns404InTheStandardFormat() throws Exception {
+        mockMvc.perform(get("/api/does-not-exist"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.path").value("/api/does-not-exist"));
+    }
+
+    @Test
+    void wrongHttpMethod_returns405InTheStandardFormat() throws Exception {
+        mockMvc.perform(get("/api/worklog/1/start"))
+                .andExpect(status().isMethodNotAllowed())
+                .andExpect(jsonPath("$.status").value(405));
     }
 
     private static String validStartBody() {

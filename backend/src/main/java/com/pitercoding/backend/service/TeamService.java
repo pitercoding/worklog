@@ -1,5 +1,6 @@
 package com.pitercoding.backend.service;
 
+import com.pitercoding.backend.exception.NotFoundException;
 import com.pitercoding.backend.model.Team;
 import com.pitercoding.backend.repository.TeamRepository;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,6 @@ public class TeamService {
 
     public Team getById(Long id) {
         return teamRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Team not found: " + id));
+                .orElseThrow(() -> new NotFoundException("Team not found: " + id));
     }
 }

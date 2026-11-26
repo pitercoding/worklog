@@ -3,6 +3,7 @@ package com.pitercoding.backend.controller;
 import com.pitercoding.backend.dto.ActivityEntryResponse;
 import com.pitercoding.backend.dto.StartActivityRequest;
 import com.pitercoding.backend.dto.WorkDayResponse;
+import com.pitercoding.backend.exception.NotFoundException;
 import com.pitercoding.backend.mapper.ActivityEntryMapper;
 import com.pitercoding.backend.mapper.WorkDayMapper;
 import com.pitercoding.backend.model.ActivityEntry;
@@ -78,10 +79,7 @@ public class WorkLogController {
     ) {
         LocalDate day = date != null ? date : LocalDate.now(clock);
         WorkDay workDay = workDayService.findByEmployeeAndDate(employeeId, day)
-                .orElseThrow(() -> new org.springframework.web.server.ResponseStatusException(
-                        org.springframework.http.HttpStatus.NOT_FOUND,
-                        "No workday for employee: " + employeeId
-                ));
+                .orElseThrow(() -> new NotFoundException("No workday for employee: " + employeeId));
         ActivityEntry current = activityEntryService.findOpenByWorkDayId(workDay.getId()).orElse(null);
         List<ActivityEntry> entries = activityEntryService.findByWorkDayId(workDay.getId());
         WorkDayResponse response = WorkDayMapper.toResponse(workDay, current, entries);

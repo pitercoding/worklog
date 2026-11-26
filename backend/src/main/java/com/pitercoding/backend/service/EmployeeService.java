@@ -1,5 +1,6 @@
 package com.pitercoding.backend.service;
 
+import com.pitercoding.backend.exception.NotFoundException;
 import com.pitercoding.backend.model.Employee;
 import com.pitercoding.backend.repository.EmployeeRepository;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,6 @@ public class EmployeeService {
 
     public Employee getById(Long id) {
         return employeeRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Employee not found: " + id));
+                .orElseThrow(() -> new NotFoundException("Employee not found: " + id));
     }
 }

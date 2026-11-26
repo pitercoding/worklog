@@ -1,5 +1,6 @@
 package com.pitercoding.backend.service;
 
+import com.pitercoding.backend.exception.NotFoundException;
 import com.pitercoding.backend.model.Program;
 import com.pitercoding.backend.repository.ProgramRepository;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,6 @@ public class ProgramService {
 
     public Program getById(Long id) {
         return programRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Program not found: " + id));
+                .orElseThrow(() -> new NotFoundException("Program not found: " + id));
     }
 }

@@ -1,5 +1,6 @@
 package com.pitercoding.backend.service;
 
+import com.pitercoding.backend.exception.NotFoundException;
 import com.pitercoding.backend.model.Language;
 import com.pitercoding.backend.repository.LanguageRepository;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,6 @@ public class LanguageService {
 
     public Language getById(Long id) {
         return languageRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Language not found: " + id));
+                .orElseThrow(() -> new NotFoundException("Language not found: " + id));
     }
 }
