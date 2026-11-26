@@ -1,4 +1,6 @@
-const BASE_API = 'http://localhost:8080/api';
+import { environment } from '../../../environments/environment';
+
+const BASE_API = environment.apiUrl;
 
 export const API_ENDPOINTS = {
   WORKLOG: `${BASE_API}/worklog`,
