@@ -1,5 +1,6 @@
 package com.pitercoding.backend.integration;
 
+import com.pitercoding.backend.model.ActivityEntry;
 import com.pitercoding.backend.model.Employee;
 import com.pitercoding.backend.model.Subactivity;
 import com.pitercoding.backend.model.WorkDay;
@@ -135,6 +136,30 @@ class WorkLogFlowIntegrationTest {
         assertThatThrownBy(() -> workDayRepository.saveAndFlush(newWorkDay(employee)))
                 .isInstanceOf(DataIntegrityViolationException.class);
         assertThat(workDayRepository.count()).isEqualTo(1);
+    }
+
+    @Test
+    void database_allowsOnlyOneOpenActivityPerWorkDay() {
+        Employee employee = employeeRepository.findById(employeeId).orElseThrow();
+        WorkDay workDay = workDayRepository.saveAndFlush(newWorkDay(employee));
+        activityEntryRepository.saveAndFlush(newOpenEntry(workDay));
+
+        assertThatThrownBy(() -> activityEntryRepository.saveAndFlush(newOpenEntry(workDay)))
+                .isInstanceOf(DataIntegrityViolationException.class);
+        assertThat(activityEntryRepository.count()).isEqualTo(1);
+    }
+
+    private ActivityEntry newOpenEntry(WorkDay workDay) {
+        Subactivity subactivity = subactivityRepository.findAll().get(0);
+        ActivityEntry entry = new ActivityEntry();
+        entry.setWorkDay(workDay);
+        entry.setProgram(programRepository.findAll().get(0));
+        entry.setTeam(teamRepository.findAll().get(0));
+        entry.setLanguage(languageRepository.findAll().get(0));
+        entry.setActivity(subactivity.getActivity());
+        entry.setSubactivity(subactivity);
+        entry.setStartedAt(OffsetDateTime.parse("2026-01-15T09:00:00Z"));
+        return entry;
     }
 
     private ResultActions start(long activity) throws Exception {

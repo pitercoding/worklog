@@ -117,6 +117,8 @@ public class WorkLogService {
         entry.setFinishedAt(finishedAt);
         long seconds = Duration.between(entry.getStartedAt(), finishedAt).getSeconds();
         entry.setDurationSeconds(Math.max(0, seconds));
-        activityEntryService.save(entry);
+        // Flush now: the database allows only one open entry per workday, and Hibernate
+        // would otherwise run the INSERT of the next entry before this UPDATE.
+        activityEntryService.saveAndFlush(entry);
     }
 }
