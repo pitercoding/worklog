@@ -8,6 +8,8 @@ import com.pitercoding.backend.service.LanguageService;
 import com.pitercoding.backend.service.ProgramService;
 import com.pitercoding.backend.service.SubactivityService;
 import com.pitercoding.backend.service.TeamService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +21,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/lookups")
+@Tag(name = "Lookups", description = "Reference data used by the activity form")
 public class LookupController {
 
     private final ProgramService programService;
@@ -41,6 +44,7 @@ public class LookupController {
         this.subactivityService = subactivityService;
     }
 
+    @Operation(summary = "List all active lookups", description = "Programs, teams, languages, activities and subactivities.")
     @GetMapping
     public ResponseEntity<LookupResponse> getAllLookups() {
         LookupResponse response = new LookupResponse();
@@ -62,6 +66,7 @@ public class LookupController {
         return ResponseEntity.ok(response);
     }
 
+    @Operation(summary = "List active subactivities of an activity")
     @GetMapping("/subactivities")
     public ResponseEntity<List<SubactivityItem>> getSubactivities(
             @RequestParam Long activityId

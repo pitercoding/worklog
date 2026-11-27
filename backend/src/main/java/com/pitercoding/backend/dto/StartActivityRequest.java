@@ -1,5 +1,6 @@
 package com.pitercoding.backend.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
@@ -14,6 +15,7 @@ public class StartActivityRequest {
     private Long activityId;
     @NotNull
     private Long subactivityId;
+    @Schema(description = "Optional free text, up to 255 characters", example = "Fixing the login bug")
     @Size(max = 255)
     private String note;
 

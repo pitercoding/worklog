@@ -123,6 +123,15 @@ class WorkLogFlowIntegrationTest {
     }
 
     @Test
+    void openApiDocumentation_describesTheWorklogEndpoints() throws Exception {
+        mockMvc.perform(get("/v3/api-docs"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.info.title").value("Worklog API"))
+                .andExpect(jsonPath("$.paths['/api/worklog/{employeeId}/start'].post.summary").value("Start an activity"))
+                .andExpect(jsonPath("$.paths['/api/worklog/{employeeId}'].get").exists());
+    }
+
+    @Test
     void getWorkDay_returns404WhenNothingWasStarted() throws Exception {
         mockMvc.perform(get("/api/worklog/{id}", employeeId))
                 .andExpect(status().isNotFound());
