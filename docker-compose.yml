@@ -1,0 +1,50 @@
+# Local development helpers.
+#
+#   docker compose up -d                        -> PostgreSQL only (run backend and frontend on your machine)
+#   docker compose --profile full up -d --build -> PostgreSQL + backend in containers
+#   docker compose down                         -> stop (data is kept); add -v to delete the data too
+#
+# Credentials below are for local development only.
+
+name: worklog
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: worklog-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: worklog
+      POSTGRES_USER: worklog
+      POSTGRES_PASSWORD: worklog_dev_password
+    ports:
+      # 5433 on the host avoids a clash with a PostgreSQL installed on your machine (usually 5432).
+      - "${DB_PORT:-5433}:5432"
+    volumes:
+      - worklog-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U worklog -d worklog"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    profiles: ["full"]
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: worklog-backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/worklog
+      DB_USER: worklog
+      DB_PASSWORD: worklog_dev_password
+      CORS_ORIGINS: http://localhost:4200
+    ports:
+      - "${BACKEND_PORT:-8080}:8080"
+
+volumes:
+  worklog-postgres-data:
