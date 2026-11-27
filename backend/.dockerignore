@@ -1,0 +1,22 @@
+# Build output and tooling
+target/
+.mvn/wrapper/maven-wrapper.jar
+
+# Local config and secrets
+.env
+.env.*
+application-dev.*
+application-local.*
+
+# Editors, VCS and docs
+.git
+.gitignore
+.gitattributes
+.idea/
+.vscode/
+*.iml
+HELP.md
+
+# Docker files themselves
+Dockerfile
+.dockerignore

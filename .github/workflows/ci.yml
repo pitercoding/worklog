@@ -34,6 +34,17 @@ jobs:
       - name: Build and run tests
         run: ./mvnw --batch-mode --no-transfer-progress verify
 
+  docker:
+    name: Backend Docker image (build)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+
+      # Makes sure the image used for deployment still builds (nothing is pushed).
+      - name: Build image
+        run: docker build --tag worklog-backend ./backend
+
   frontend:
     name: Frontend (build and tests)
     runs-on: ubuntu-latest
