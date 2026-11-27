@@ -26,4 +26,9 @@ public class ActivityEntryService {
     public ActivityEntry save(ActivityEntry entry) {
         return activityEntryRepository.save(entry);
     }
+
+    /** Writes the change to the database immediately (used to close an entry before opening another). */
+    public ActivityEntry saveAndFlush(ActivityEntry entry) {
+        return activityEntryRepository.saveAndFlush(entry);
+    }
 }
