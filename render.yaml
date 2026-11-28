@@ -1,0 +1,28 @@
+# Render Blueprint: describes the backend web service.
+# Variables marked `sync: false` are asked for in the Render dashboard (they are never stored in Git).
+services:
+  - type: web
+    name: worklog-api
+    runtime: docker
+    region: frankfurt
+    plan: free
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      # Day boundaries ("today") are computed in this time zone.
+      - key: APP_TIMEZONE
+        value: Europe/Berlin
+      # Neon connection, JDBC format: jdbc:postgresql://<host>/<database>?sslmode=require
+      - key: DB_URL
+        sync: false
+      - key: DB_USER
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      # Allowed frontend origin(s), comma separated. Example: https://worklog.vercel.app
+      - key: CORS_ORIGINS
+        sync: false

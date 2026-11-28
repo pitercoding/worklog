@@ -28,5 +28,6 @@ EXPOSE 8080
 HEALTHCHECK --interval=30s --timeout=5s --start-period=60s --retries=3 \
     CMD wget -q -O /dev/null "http://localhost:${PORT}/health" || exit 1
 
-# Use at most 75% of the container memory for the heap (the free tiers are small).
-ENTRYPOINT ["java", "-XX:MaxRAMPercentage=75", "-jar", "app.jar"]
+# Tuned for small containers (the free tiers have ~512 MB): the serial GC uses less memory,
+# and the heap is capped at 60% so there is room for metaspace and thread stacks.
+ENTRYPOINT ["java", "-XX:MaxRAMPercentage=60", "-XX:+UseSerialGC", "-jar", "app.jar"]
