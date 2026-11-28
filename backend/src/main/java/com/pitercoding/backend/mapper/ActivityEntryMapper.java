@@ -8,7 +8,7 @@ public final class ActivityEntryMapper {
     }
 
     /**
-     * ActivityEntryMapper: converte ActivityEntry → ActivityEntryResponse
+     * Converts an {@link ActivityEntry} into an {@link ActivityEntryResponse}.
      */
     public static ActivityEntryResponse toResponse(ActivityEntry entry) {
         if (entry == null) {

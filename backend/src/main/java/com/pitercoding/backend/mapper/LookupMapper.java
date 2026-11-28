@@ -13,7 +13,7 @@ public final class LookupMapper {
     }
 
     /**
-     * LookupMapper: converte entidades de lookup → LookupItem / SubactivityItem
+     * Converts lookup entities into {@link LookupItem} and {@link SubactivityItem}.
      */
 
     public static LookupItem toItem(Program program) {
