@@ -1,0 +1,16 @@
+{
+  "properties": [
+    {
+      "name": "app.timezone",
+      "type": "java.lang.String",
+      "description": "Time zone used to decide what \"today\" is for workdays, for example Europe/Berlin. When blank, the server default time zone is used. Set with the APP_TIMEZONE environment variable.",
+      "defaultValue": ""
+    },
+    {
+      "name": "app.cors.allowed-origins",
+      "type": "java.lang.String[]",
+      "description": "Frontend origins allowed to call the API (CORS), comma separated, for example https://worklogtrack.vercel.app. Set with the CORS_ORIGINS environment variable.",
+      "defaultValue": "http://localhost:4200"
+    }
+  ]
+}
