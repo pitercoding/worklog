@@ -30,8 +30,8 @@
     </div>
   </header>
 
-  <p class="day-finished-banner" *ngIf="state.workDay?.status === 'FINISHED'">
-    Day finished at {{ state.workDay?.finishedAt | date: 'shortTime' }}.
+  <p class="day-finished-banner" *ngIf="state.workDay && state.workDay.status === 'FINISHED'">
+    Day finished at {{ state.workDay.finishedAt | date: 'shortTime' }}.
   </p>
 
   <div class="grid">
