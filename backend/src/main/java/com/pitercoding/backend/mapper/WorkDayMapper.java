@@ -13,7 +13,7 @@ public final class WorkDayMapper {
     }
 
     /**
-     * WorkDayMapper: converte WorkDay + entries → WorkDayResponse
+     * Converts a {@link WorkDay} and its entries into a {@link WorkDayResponse}.
      */
 
     public static WorkDayResponse toResponse(WorkDay workDay, ActivityEntry currentEntry, List<ActivityEntry> entries) {
