@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  // Replace with the deployed backend URL (set during the deploy task).
-  apiUrl: 'https://worklog-api.onrender.com/api',
+  // Backend deployed on Render.
+  apiUrl: 'https://worklog-api-ndza.onrender.com/api',
 };
