@@ -49,3 +49,58 @@ p {
     min-width: 760px;
   }
 }
+
+/* Phones: each activity becomes a card (label on the left, value on the right) */
+@media (max-width: 640px) {
+  table {
+    min-width: 0;
+  }
+
+  /* Header row hidden visually but still available to screen readers */
+  thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+
+  table,
+  tbody,
+  tr,
+  td {
+    display: block;
+    width: 100%;
+  }
+
+  tbody tr {
+    margin-bottom: 10px;
+    padding: 4px 0;
+    border: 1px solid rgba(111, 168, 255, 0.2);
+    border-radius: var(--radius-md);
+    background: rgba(8, 15, 27, 0.5);
+  }
+
+  tbody tr.row-running {
+    background: rgba(87, 255, 162, 0.1);
+    border-color: rgba(87, 255, 162, 0.4);
+  }
+
+  td {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 6px 12px;
+    border-bottom: none;
+    text-align: right;
+    overflow-wrap: anywhere;
+  }
+
+  td::before {
+    content: attr(data-label);
+    flex: 0 0 auto;
+    color: var(--accent);
+    font-weight: 600;
+    text-align: left;
+  }
+}
