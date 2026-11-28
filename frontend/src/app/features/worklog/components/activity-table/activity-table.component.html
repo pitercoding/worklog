@@ -1,32 +1,34 @@
 <div class="table-scroll" *ngIf="entries.length > 0; else emptyState">
-  <table>
-    <thead>
-      <tr>
-        <th>Program</th>
-        <th>Team</th>
-        <th>Language</th>
-        <th>Activity</th>
-        <th>Subactivity</th>
-        <th>Start</th>
-        <th>End</th>
-        <th>Duration</th>
-        <th>Note</th>
+  <!-- The roles keep the table semantics when the CSS turns rows into cards on small screens. -->
+  <table role="table">
+    <thead role="rowgroup">
+      <tr role="row">
+        <th role="columnheader">Program</th>
+        <th role="columnheader">Team</th>
+        <th role="columnheader">Language</th>
+        <th role="columnheader">Activity</th>
+        <th role="columnheader">Subactivity</th>
+        <th role="columnheader">Start</th>
+        <th role="columnheader">End</th>
+        <th role="columnheader">Duration</th>
+        <th role="columnheader">Note</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody role="rowgroup">
       <tr
+        role="row"
         *ngFor="let entry of sortedEntries; trackBy: trackByEntryId"
         [class.row-running]="!entry.finishedAt"
       >
-        <td>{{ entry.program.name }}</td>
-        <td>{{ entry.team.name }}</td>
-        <td>{{ entry.language.name }}</td>
-        <td>{{ entry.activity.name }}</td>
-        <td>{{ entry.subactivity.name }}</td>
-        <td>{{ entry.startedAt | date: 'shortTime' }}</td>
-        <td>{{ entry.finishedAt ? (entry.finishedAt | date: 'shortTime') : '-' }}</td>
-        <td>{{ entry.durationSeconds | duration }}</td>
-        <td>{{ entry.note || '-' }}</td>
+        <td role="cell" data-label="Program">{{ entry.program.name }}</td>
+        <td role="cell" data-label="Team">{{ entry.team.name }}</td>
+        <td role="cell" data-label="Language">{{ entry.language.name }}</td>
+        <td role="cell" data-label="Activity">{{ entry.activity.name }}</td>
+        <td role="cell" data-label="Subactivity">{{ entry.subactivity.name }}</td>
+        <td role="cell" data-label="Start">{{ entry.startedAt | date: 'shortTime' }}</td>
+        <td role="cell" data-label="End">{{ entry.finishedAt ? (entry.finishedAt | date: 'shortTime') : '-' }}</td>
+        <td role="cell" data-label="Duration">{{ entry.durationSeconds | duration }}</td>
+        <td role="cell" data-label="Note">{{ entry.note || '-' }}</td>
       </tr>
     </tbody>
   </table>

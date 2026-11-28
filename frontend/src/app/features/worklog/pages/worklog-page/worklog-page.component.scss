@@ -34,6 +34,7 @@
   color: var(--text-main);
   border-radius: var(--radius-sm);
   padding: 10px 40px 10px 12px;
+  min-height: 44px;
   min-width: 220px;
   appearance: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%239fb0c9' d='M1.4 0L6 4.6 10.6 0 12 1.4 6 7.4 0 1.4z'/%3E%3C/svg%3E");
@@ -60,6 +61,7 @@ h1 {
   color: var(--text-main);
   border-radius: var(--radius-sm);
   padding: 10px 16px;
+  min-height: 44px;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
@@ -93,6 +95,7 @@ h1 {
 }
 
 .panel {
+  min-width: 0;
   background: var(--surface);
   border: 1px solid var(--surface-border);
   border-radius: var(--radius-lg);
@@ -137,7 +140,8 @@ h2 {
   }
 
   .grid {
-    grid-template-columns: 1fr;
+    /* minmax(0, 1fr): without it the column grows to the table's min-width and the whole page scrolls sideways */
+    grid-template-columns: minmax(0, 1fr);
     grid-template-areas:
       'form'
       'timer'
@@ -157,6 +161,25 @@ h2 {
 
   .user-box select {
     min-width: 0;
+    width: 100%;
+  }
+}
+
+/* Phones */
+@media (max-width: 480px) {
+  .worklog-page {
+    padding: 14px;
+  }
+
+  .panel {
+    padding: 14px;
+  }
+
+  .grid {
+    gap: 12px;
+  }
+
+  .save-button {
     width: 100%;
   }
 }

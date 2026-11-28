@@ -17,6 +17,7 @@ input {
   color: var(--text-main);
   border-radius: var(--radius-sm);
   padding: 10px 12px;
+  min-height: 44px;
   outline: none;
 }
 
@@ -41,6 +42,7 @@ button {
   color: var(--text-main);
   border-radius: var(--radius-sm);
   padding: 10px 16px;
+  min-height: 44px;
   font-weight: 600;
   cursor: pointer;
 }
@@ -54,4 +56,24 @@ button:disabled {
   margin: 0;
   color: var(--text-muted);
   font-size: 0.88rem;
+}
+
+/* Tablets: two columns (Program|Team, Language|Activity, Subactivity|Note) */
+@media (min-width: 600px) and (max-width: 900px) {
+  .activity-form {
+    grid-template-columns: 1fr 1fr;
+    column-gap: 16px;
+  }
+
+  button,
+  .form-locked-message {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Phones: the submit button uses the full width */
+@media (max-width: 480px) {
+  button {
+    justify-self: stretch;
+  }
 }
